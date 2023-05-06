@@ -3,9 +3,15 @@
     "functions": {
       "api/*.php": {
         "runtime": "vercel-php@0.6.0"
-      },
-      "python/*.py": {
-        "runtime":"vercel-node@1.1.2"
       }
-    }
+    },
+    "builds":[
+        {
+            "src":"python/*.py",
+            "use":"vercel@python",
+            "config":{
+                "runtime":"python3.10"
+            }
+        }
+    ]
 }

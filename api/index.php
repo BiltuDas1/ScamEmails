@@ -5,7 +5,7 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
         echo $text;
     }
 } else {
-    $json = shell_exec("python --version");
+    $json = shell_exec("python python/jsonparse.py " . $_REQUEST['email']);
     echo $json;
 }
 ?>
