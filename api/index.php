@@ -1,4 +1,5 @@
 <?php
+echo "Test";
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(strtolower($_REQUEST['format']) == 'text'){
         $text = shell_exec("python ./python/textparse.py " . strtolower($_REQUEST['email']));
