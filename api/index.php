@@ -1,11 +1,11 @@
 <?php
 if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
     if(strtolower($_REQUEST['format']) == 'text'){
-        $text = shell_exec("python python/textparse.py " . $_REQUEST['email']);
+        $text = shell_exec("python /python/textparse.py " . $_REQUEST['email']);
         echo $text;
     }
 } else {
-    $json = shell_exec("python python/jsonparse.py " . $_REQUEST['email']);
+    $json = shell_exec("python /python/jsonparse.py " . $_REQUEST['email']);
     echo $json;
 }
 ?>
