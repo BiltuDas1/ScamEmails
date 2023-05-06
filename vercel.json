@@ -4,14 +4,5 @@
       "api/*.php": {
         "runtime": "vercel-php@0.6.0"
       }
-    },
-    "builds":[
-        {
-            "src":"python/*.py",
-            "use":"vercel@python",
-            "config":{
-                "runtime":"python3.10"
-            }
-        }
-    ]
+    }
 }
