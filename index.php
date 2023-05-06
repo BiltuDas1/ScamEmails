@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <?php
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(strtolower($_REQUEST['format']) == 'text'){
@@ -19,3 +21,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 ?>
+</html>
