@@ -1,12 +1,11 @@
 <?php
 if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
     if(strtolower($_REQUEST['format']) == 'text'){
-        $text = shell_exec("python ./python/textparse.py " . strtolower($_REQUEST['email']));
+        $text = shell_exec("python python/textparse.py " . $_REQUEST['email']);
         echo $text;
     }
 } else {
-    echo "Test";
-    $json = shell_exec("python3 --version");
+    $json = shell_exec("python --version");
     echo $json;
 }
 ?>
