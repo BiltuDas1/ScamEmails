@@ -5,6 +5,7 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
         echo $text;
     }
 } else {
+    echo "Test";
     $json = shell_exec("python3 --version");
     echo $json;
 }
