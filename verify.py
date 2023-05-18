@@ -1,16 +1,46 @@
 import sys
 
 def is_valid_email(email):
-    if "@" not in email:
-        return False
-    local_part, domain_part = email.split("@")
-    if not local_part or not domain_part:
-        return False
-    if "." not in domain_part or domain_part.startswith("[") and domain_part.endswith("]"):
-        return False
-    if len(email) > 254:
-        return False
-    return True
+    isDomainOk = False
+    isLocalOk = False
+    if email.find("@") != -1 and len(email) <= 254:
+        local = email.split("@")[0]
+        domain = email.split("@")[1]
+
+        # Check Domain
+        if not domain == "":
+            if len(domain) >= 2 or len(domain) <= 63:
+                if domain.find("-") == -1:
+                    if not domain.startswith("-") and not domain.endswith("-") and domain.find("..") == -1 and not domain.endswith("."):
+                        if domain.find(".") != -1:
+                            temp = domain.replace(".","")
+                            if temp.isalnum():
+                                isDomainOk = True
+                else:
+                    if not domain.startswith("-") and not domain.endswith("-") and domain.find("..") == -1 and not domain.endswith("."):
+                        temp = domain.replace("-","")
+                        if temp.find(".") != -1:
+                            temp = temp.replace(".","")
+                            if temp.isalnum():
+                                isDomainOk = True
+    
+        # Check Address
+        if not local == "":
+            if local.find("-") == -1 and local.find("_") == -1 and local.find(".") == -1:
+                if local.isalnum():
+                    isLocalOk = True
+            else:
+                temp = local.replace("-","")
+                temp = temp.replace("_","")
+                temp = temp.replace(".","")
+                if temp.isalnum():
+                    isLocalOk = True
+
+        # Final
+        if isDomainOk and isLocalOk:
+            return True
+        else:
+            return False
 
 if len(sys.argv) == 2:
     if sys.argv[1] == "--help":

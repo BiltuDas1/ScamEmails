@@ -1,10 +1,77 @@
 <?php
 $data = "https://scam-emailapi-biltu.vercel.app/data.txt";
 
+function is_valid_email($email) {
+    $isDomainOk = false;
+    $isLocalOk = false;
+    if (strpos($email, "@") !== false && strlen($email) <= 254) {
+        $local = explode("@", $email)[0];
+        $domain = explode("@", $email)[1];
+
+        // Check Domain
+        if ($domain !== "") {
+            if (strlen($domain) >= 2 && strlen($domain) <= 63) {
+                if (strpos($domain, "-") === false) {
+                    if (!startsWith($domain, "-") && !endsWith($domain, "-") && strpos($domain, "..") === false && !endsWith($domain, ".")) {
+                        if (strpos($domain, ".") !== false) {
+                            $temp = str_replace(".", "", $domain);
+                            if (ctype_alnum($temp)) {
+                                $isDomainOk = true;
+                            }
+                        }
+                    }
+                } else {
+                    if (!startsWith($domain, "-") && !endsWith($domain, "-") && strpos($domain, "..") === false && !endsWith($domain, ".")) {
+                        $temp = str_replace("-", "", $domain);
+                        if (strpos($temp, ".") !== false) {
+                            $temp = str_replace(".", "", $temp);
+                            if (ctype_alnum($temp)) {
+                                $isDomainOk = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check Address
+        if ($local !== "") {
+            if (strpos($local, "-") === false && strpos($local, "_") === false && strpos($local, ".") === false) {
+                if (ctype_alnum($local)) {
+                    $isLocalOk = true;
+                }
+            } else {
+                $temp = str_replace("-", "", $local);
+                $temp = str_replace("_", "", $temp);
+                $temp = str_replace(".", "", $temp);
+                if (ctype_alnum($temp)) {
+                    $isLocalOk = true;
+                }
+            }
+        }
+
+        // Final
+        if ($isDomainOk && $isLocalOk) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function startsWith($string, $prefix) {
+    return substr($string, 0, strlen($prefix)) === $prefix;
+}
+
+function endsWith($string, $suffix) {
+    return substr($string, -strlen($suffix)) === $suffix;
+}
+
+
 if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
     if(isset($_REQUEST['email']) && !empty($_REQUEST['email'])){
         if(strtolower($_REQUEST['format']) == 'text'){
-            if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
+            if(is_valid_email($_REQUEST['email']) && strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
                 echo nl2br("true");
                 exit(0);
             } else {
@@ -13,7 +80,7 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
             }
         }
         elseif (strtolower($_REQUEST['format']) == 'json'){
-            if(strpos($_REQUEST['email'], "@") !== false){
+            if(is_valid_email($_REQUEST['email'])){
                 if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
                     echo nl2br("{\"ok\":true, \"found\":true}");
                     exit(0);
@@ -43,7 +110,7 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
 }
 
 if(isset($_REQUEST['email']) && !empty($_REQUEST['email'])){
-    if(strpos($_REQUEST['email'], "@") !== false){
+    if(is_valid_email($_REQUEST['email'])){
         if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
             echo nl2br("{\"ok\":true, \"found\":true}");
             exit(0);
