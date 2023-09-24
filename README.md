@@ -24,7 +24,8 @@ https://scam-emailapi.vercel.app/api?email=example@example.com&format=text
 ```
 Note that the format parameter can only be set to either "text" or "json". If no format is specified, JSON will be the default.
 
-### Examples in CURL
+## Examples
+### Example in CURL (POST)
 
 Here's an example of checking if "adavid244[at]yahoo[dot]com" is in the database using a POST request in cURL:
 ```
@@ -33,6 +34,45 @@ curl -s -X POST \
 https://scam-emailapi.vercel.app/api
 
 # Output: {"ok":true, "found":true}
+```
+
+### Example in Javascript Fetch (POST)
+
+Here's an example of checking if "adavid244[at]yahoo[dot]com" is in the database using a POST request in Javascript Fetch:
+```
+const text = {
+    email: 'adavid244@yahoo.com'
+};
+
+const request = fetch('https://scam-emailapi.vercel.app/api', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(text).toString()
+    })
+    .then((data) => data.json())
+    .then((data) => console.log(data));
+
+// Output: { ok: true, found: true }
+```
+
+### Example in Python requests (POST)
+
+Here's an example of checking if "adavid244[at]yahoo[dot]com" is in the database using a POST request in Python requests:
+```
+import requests
+import json
+
+data = {
+    'email': 'adavid244@yahoo.com'
+}
+
+response = json.loads(requests.post('https://scam-emailapi.vercel.app/api', data=data).text)
+
+print(response)
+
+# Output: {'ok': True, 'found': True}
 ```
 
 ## Contact
