@@ -63,7 +63,7 @@ function is_valid_email($email) {
 
 function if_temp_email($email) {
     $domain = explode("@", strtolower($email))[1];
-    if (strpos(file_get_contents($tempdomains), $domain) !== false){
+    if (strpos(file_get_contents($GLOBALS['tempdomains']), $domain) !== false){
         return true;
     } else {
         return false;
