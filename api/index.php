@@ -1,6 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 $data = "https://scam-emailapi-biltu.vercel.app/data.txt";
+$tempdomains = "https://scam-emailapi-biltu.vercel.app/TempDomains.conf";
 
 function is_valid_email($email) {
     $isDomainOk = false;
@@ -60,6 +61,15 @@ function is_valid_email($email) {
     }
 }
 
+function if_temp_email($email) {
+    $domain = explode("@", strtolower($email))[1];
+    if (strpos(file_get_contents($data), $domain) !== false){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function startsWith($string, $prefix) {
     return substr($string, 0, strlen($prefix)) === $prefix;
 }
@@ -72,7 +82,7 @@ function endsWith($string, $suffix) {
 if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
     if(isset($_REQUEST['email']) && !empty($_REQUEST['email'])){
         if(strtolower($_REQUEST['format']) == 'text'){
-            if(is_valid_email($_REQUEST['email']) && strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
+            if(is_valid_email($_REQUEST['email']) && if_temp_email($_REQUEST['email']) == false && strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
                 echo nl2br("true");
                 exit(0);
             } else {
@@ -82,12 +92,17 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
         }
         elseif (strtolower($_REQUEST['format']) == 'json'){
             if(is_valid_email($_REQUEST['email'])){
-                if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
-                    echo nl2br("{\"ok\":true, \"found\":true}");
-                    exit(0);
+                if(!if_temp_email($_REQUEST['email'])){
+                    if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
+                        echo nl2br("{\"ok\":true, \"found\":true}");
+                        exit(0);
+                    } else {
+                        echo nl2br("{\"ok\":true, \"found\":false}");
+                        exit(0);
+                    }
                 } else {
-                    echo nl2br("{\"ok\":true, \"found\":false}");
-                    exit(0);
+                    echo nl2br("{\"ok\":false, \"description\":\"Temporary Email Addresses are not allowed\"}");
+                    exit(1);
                 }
             } else {
                 echo nl2br("{\"ok\":false, \"description\":\"Invalid email address\"}");
@@ -112,12 +127,17 @@ if(isset($_REQUEST['format']) && !empty($_REQUEST['format'])){
 
 if(isset($_REQUEST['email']) && !empty($_REQUEST['email'])){
     if(is_valid_email($_REQUEST['email'])){
-        if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
-            echo nl2br("{\"ok\":true, \"found\":true}");
-            exit(0);
+        if(!if_temp_email($_REQUEST['email'])){
+            if(strpos(file_get_contents($data), strtolower($_REQUEST['email'])) !== false){
+                echo nl2br("{\"ok\":true, \"found\":true}");
+                exit(0);
+            } else {
+                echo nl2br("{\"ok\":true, \"found\":false}");
+                exit(0);
+            }
         } else {
-            echo nl2br("{\"ok\":true, \"found\":false}");
-            exit(0);
+            echo nl2br("{\"ok\":false, \"description\":\"Temporary Email Addresses are not allowed\"}");
+            exit(1);
         }
     } else {
         echo nl2br("{\"ok\":false, \"description\":\"Invalid email address\"}");
