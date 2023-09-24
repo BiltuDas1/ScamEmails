@@ -1,5 +1,4 @@
 <?php
-header('Access-Control-Allow-Origin: *');
 $data = "https://scam-emailapi-biltu.vercel.app/data.txt";
 $tempdomains = "https://scam-emailapi-biltu.vercel.app/TempDomains.conf";
 
