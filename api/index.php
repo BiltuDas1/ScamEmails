@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 $data = "https://scam-emailapi-biltu.vercel.app/data.txt";
 
 function is_valid_email($email) {
