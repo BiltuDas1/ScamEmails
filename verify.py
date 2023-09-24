@@ -42,15 +42,6 @@ def is_valid_email(email):
         else:
             return False
 
-def if_temp_email(email):
-    domain = email.split("@")[1]
-    with open('TempDomains.conf', 'r') as d:
-        temp = d.read()
-        if temp.find(domain) != -1:
-            return True
-        else:
-            return False
-
 if len(sys.argv) == 2:
     if sys.argv[1] == "--help":
         print("""Parameters of {} is:
@@ -58,15 +49,13 @@ if len(sys.argv) == 2:
 {} [email]
 [email] - The email address to check""".format(sys.argv[0],sys.argv[0]))
     elif is_valid_email(sys.argv[1]):
-        if not if_temp_email(sys.argv[1]):
-            with open('data.txt', 'r') as text:
-                str = text.read()
-                if str.find(sys.argv[1]) != -1:
-                    print(f"{sys.argv[1]} found into list")
-                else:
-                    print(f"{sys.argv[1]} isn't found into list")
-        else:
-            print("Temporary Email Addresses are not allowed")
+        with open('data.txt', 'r') as text:
+            str = text.read()
+            if str.find(sys.argv[1]) != -1:
+                print(f"{sys.argv[1]} found into list")
+            else:
+                print(f"{sys.argv[1]} isn't found into list")
+        exit(0)
     else:
         print("Invalid Email Address")
         exit(1)
